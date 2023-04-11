@@ -7,7 +7,9 @@ import chatWhatsappRoute from './src/routes/chat-whatsapp.route.js';
 import cons from 'consolidate';
 import path from 'path';
 import {fileURLToPath} from 'url';
-dotenv.config();
+dotenv.config({
+    allowEmptyValues: true
+});
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

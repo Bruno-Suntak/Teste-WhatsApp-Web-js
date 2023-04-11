@@ -13,7 +13,9 @@ import archiver from 'archiver';
 import unzipper from 'unzipper';
 import path from 'path';
 import ip from 'ip';
-dotenv.config();
+dotenv.config({
+    allowEmptyValues: true
+});
 
 const { Client, RemoteAuth, LocalAuth } = pkgWhatsApp;
 

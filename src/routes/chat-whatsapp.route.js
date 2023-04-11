@@ -6,7 +6,9 @@ import QRCode from 'qrcode'
 import puppeteer from 'puppeteer';
 import requestIp from 'request-ip';
 import { initializeClient, getInitializedClient } from '../controllers/chat-whatsapp.controller.js';
-dotenv.config();
+dotenv.config({
+    allowEmptyValues: true
+});
 
 var globals = global
 
