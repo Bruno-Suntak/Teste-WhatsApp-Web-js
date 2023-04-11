@@ -96,6 +96,17 @@ export async function initializeClient(id){
             }),
             puppeteer: {
                 headless: false,
+                args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                    '--start-maximized',
+                    '--no-default-browser-check',
+                    '--disable-web-security',
+                    '--disable-features=IsolateOrigins,site-per-process',
+                    '--ignore-certificate-errors',
+                    '--ignore-certificate-errors-spki-list',
+                    '--disable-extensions',
+                ]
             },
         });
 
@@ -134,6 +145,17 @@ export async function getInitializedClient(id){
             }),
             puppeteer: {
                 headless: false,
+                args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                    '--start-maximized',
+                    '--no-default-browser-check',
+                    '--disable-web-security',
+                    '--disable-features=IsolateOrigins,site-per-process',
+                    '--ignore-certificate-errors',
+                    '--ignore-certificate-errors-spki-list',
+                    '--disable-extensions',
+                ]
             },
         });
 
