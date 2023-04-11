@@ -29,11 +29,11 @@ var userDataDir = dirPath;
 var requiredDirs = ['Default', 'IndexedDB', 'Local Storage'];
 var sessions = {};
 
-let store
-mongoose.connect(process.env.MONGODB_URI).then( () => {
-    console.log('Conectado no Banco de Dados!');
-    store = new MongoStore({ mongoose: mongoose });
-});
+// let store
+// mongoose.connect(process.env.MONGODB_URI).then( () => {
+//     console.log('Conectado no Banco de Dados!');
+//     store = new MongoStore({ mongoose: mongoose });
+// });
 
 
 export async function initializeClientDisabled(ip){
