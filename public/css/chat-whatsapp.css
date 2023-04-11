@@ -1,0 +1,53 @@
+html, body{
+    background-image: url("../img/WhatsAppBackground.jpg");
+    background-size:contain;
+}
+
+#cardChatWhatsApp {
+    display: flex;
+    margin-top: 30%;
+    border-color: black;
+}
+
+#cardPaginaInicial {
+    display: flex;
+    margin-top: 5%;
+    border-radius: 50px;
+    border-color: black;
+}
+
+#cardSubtitle{
+    display: flex;
+    margin-top: 5%;
+    border-radius: 50px;
+    border-color: black;
+}
+
+#cardPaginaInicialSecundario{
+    display: flex;
+    border-radius: 50px;
+    border-color: black;
+}
+
+#navbar-horizontal-top{
+    margin-top: -20px;
+    margin-bottom: 30px;
+    opacity: 98%;
+}
+
+#btn-iniciar-sessao{
+    margin-top: 5%;
+    margin-left: 5%;
+    margin-bottom: 30%;
+    border-radius: 50px;
+    width: 300px;
+    height: 50px;
+}
+
+#info-botao{
+    margin-top: 30%;
+}
+
+#info-subtitle{
+    padding-top: 10%;
+}
