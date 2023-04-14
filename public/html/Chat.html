@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <link rel="stylesheet" href="../css/chat.css">
+    </head>
+    {% block header %}
+    {% include "./partials/head.html" %}
+    {% include "./partials/navbar.html" %}
+    {% endblock %}
+    
+    
+<body>
+        
+    {% include "./partials/navbar-vertical.html" %}
+    <div class="menu">
+        <div class="name" id="name">#</div>
+    </div>
+    
+    <div id="chat">
+        
+        <ol class="chat">
+            
+        </ol>
+        <input class="textarea" type="text" placeholder="Type here!" id="textarea" />
+        <div id='bottom'></div>
+        
+    </div>
+    <script src="../js/chat.js"></script>
+
+</body>
+</html>

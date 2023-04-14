@@ -14,6 +14,10 @@ var globals = global
 
 var router = express.Router();
 
+router.get('/chatWhatsApp', async (req,res) => {
+    res.render("../public/html/Chat");
+})
+
 router.get('/Home', async (req, res) => {
     res.render("../public/html/paginaInicial");
 });

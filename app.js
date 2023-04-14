@@ -7,9 +7,14 @@ import chatWhatsappRoute from './src/routes/chat-whatsapp.route.js';
 import cons from 'consolidate';
 import path from 'path';
 import {fileURLToPath} from 'url';
+import { Server } from 'socket.io';
+import pkgWhatsApp from 'whatsapp-web.js';
+import lodash from 'lodash';
 dotenv.config({
     allowEmptyValues: true
 });
+
+const { Client, RemoteAuth, LocalAuth } = pkgWhatsApp;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,6 +22,8 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
 const server = http.createServer(app);
+
+const io = new Server(server);
 
 app.engine('html', cons.swig);
 app.set('views', path.join(__dirname, 'views'));
@@ -54,5 +61,45 @@ function onListening() {
         'port ' + addr.port;
     console.log(`Server escutando em ${bind}...`);
 }
+
+var sockets = {};
+
+io.on("connection", function (socket) {
+
+    socket.emit("hello", "world");
+
+    socket.on("join", function(name){
+    	console.log("Joined: " + name);
+        sockets[socket.id] = name;
+        socket.emit("update", "You have connected to the server.");
+        socket.broadcast.emit("update", name + " has joined the server.")
+    });
+
+    socket.on("reqSendMessage", function(msg, contadoSelecionado){
+        socket.broadcast.emit("sendMessage", msg, contadoSelecionado);
+    });
+
+    socket.on("reciveMessage", function(msg, contato, contatoNome, mediaType, isMedia){
+        socket.broadcast.emit("recivedMessage", msg, contato, contatoNome, mediaType, isMedia);
+    });
+
+    socket.on("reqContact", function(contact){
+        socket.broadcast.emit("getContactChat", contact);
+    });
+
+    socket.on("resContact", function(contact, chat){
+        socket.broadcast.emit("reciveContact", contact);
+    });
+
+    socket.on("resSearchMessage", function(chat, contatoNome, isMedia, mediaType){
+        socket.broadcast.emit("searchMessage", chat, contatoNome, isMedia, mediaType);
+    });
+
+    socket.on("disconnect", function(){
+    	console.log("Disconnect");
+        io.emit("update", sockets[socket.id] + " has left the server.");
+        delete sockets[socket.id];
+    });
+});
 
 export default app
