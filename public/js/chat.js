@@ -1,20 +1,5 @@
 $(document).ready(function(){  
     var socket = io("http://localhost:3010");
-    var ready = false;
-
-    $("#submit").submit(function(e) {
-		e.preventDefault();
-		$("#nick").fadeOut();
-		$("#chat").fadeIn();
-		var name = "Bruno";
-		var time = new Date();
-		$("#name").html(name);
-		$("#time").html('First login: ' + time.getHours() + ':' + time.getMinutes());
-
-		ready = true;
-		socket.emit("join", name);
-
-	});
 
 	$("#textarea").keypress(function(e){
         if(e.which == 13) {
@@ -69,10 +54,6 @@ $(document).ready(function(){
             
 
     });
-
-    // socket.on("update", function(msg) {
-    // 	$('.chat').append('<li class="info">' + msg + '</li>');
-    // }); 
 
     socket.on("recivedMessage", function(msg, contato, contatoNome, mediaType, isMedia) {
         var time = new Date();
