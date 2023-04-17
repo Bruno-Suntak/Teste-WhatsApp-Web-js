@@ -16,10 +16,6 @@ $(document).ready(function(){
 
 	});
 
-    $('#btn-busca-contatos').on("click", function(){
-        socket.emit("reqContact");
-    })
-
 	$("#textarea").keypress(function(e){
         if(e.which == 13) {
         	var text = $("#textarea").val();
@@ -34,23 +30,6 @@ $(document).ready(function(){
             // automatically scroll down
             document.getElementById('bottom').scrollIntoView();
         }
-    });
-
-    socket.on("reciveContact", function(contact) {
-
-        var time = new Date();
-
-        $("#lista-contatos").append(
-            '<li id="contato1">'+
-                '<div class="card">'+
-                    '<div class="card-body">'+
-                        '<a href="#" class="nav-link px-0 align-middle">'+
-                        '<i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">'+contact+'</span></a>'+
-                    '</div>'+
-                '</div>'+
-            '</li>'
-        );
-
     });
 
     socket.on("searchMessage", function(chat, contatoNome, isMedia, mediaType) {
@@ -123,6 +102,16 @@ $(document).ready(function(){
 
         }
 
+    });
+
+    socket.on("resQr", function(qr){
+        $('#imgQrCode').attr("src", qr);
+        $('#loadingQrCode').hide();
+    });
+
+    socket.on("resClientIniciado", function(){
+        $('#divImgQrCode').hide();
+        $('#geral').show();
     });
 
 });

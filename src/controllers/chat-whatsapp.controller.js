@@ -33,13 +33,16 @@ export async function initializeClient(id){
 
         console.log('iniciando client');
 
-        client.on('qr', qr => {
-            qrcode.generate(qr, {small: true});
+        client.on('qr', async(qr) => {
+            // qrcode.generate(qr, {small: true});
+            let qrCodeBase64 = await QRCode.toDataURL(qr);
+            socket.emit('sendQr', qrCodeBase64);
         });        
         
         client.on('ready', async() => {
             console.log('Client is ready!');
             globals.iniciado = true;
+            socket.emit("clientIniciado");
 
         });
 
@@ -61,6 +64,9 @@ export async function initializeClient(id){
                 let mediaFile = await message.downloadMedia();
                 mediaType = mediaFile?.mimetype;
                 mensagem = mediaFile?.data;
+            }else{
+                mediaType = false;
+                isMedia = false;
             }
 
             socket.emit("reciveMessage", mensagem, contato, contatoNome, mediaType, isMedia);
@@ -71,20 +77,24 @@ export async function initializeClient(id){
 
         socket.on("getContactChat", async function(contact){
             console.log("obtendo chat");
-            let contatos = await client.getContacts();
+            // let contatos = await client.getContacts();
+            let numberId = await client.getNumberId(contact);
+            let numberFormatado = numberId._serialized;
 
-            for (let index = 0; index < contatos.length; index++) {
-                const contatosArray = contatos[index];
+            let contato = await client.getContactById(numberFormatado);
+            let chat = await contato.getChat();
+
+            // for (let index = 0; index < contatos.length; index++) {
+                // const contatosArray = contatos[index];
                 
-                if(contatosArray.number == contact){
-                    let contato = contatosArray.number;
-                    let contatoNome = contatosArray.name;
+                // if(contatosArray.number == contact){
+                    // let contato = contatosArray.number;
+                    // let contatoNome = contatosArray.name;
+                    let contatoNome = contato.pushname;
                     let isMedia = false;
                     let mediaType = null;
 
-                    let chat = await contatos[index].getChat();
-
-                    // socket.emit("resContact", contato);
+                    // let chat = await contatos[index].getChat();
 
                     let messages = await chat.fetchMessages({limit: 9999});
 
@@ -100,26 +110,6 @@ export async function initializeClient(id){
 
                             socket.emit('resSearchMessage', messagesArray, contatoNome, isMedia, mediaType);
 
-                            // if(mediaFile?.mimetype.includes("video") || mediaFile?.mimetype.includes("Video")){
-                            //     let mediaData = mediaFile.data;
-                            //     messagesArray = "video data";
-
-                            //     await fs.writeFileSync("./mediaCache/videoBase64.cache", mediaData, "utf8");
-
-                            //     socket.emit('resSearchMessage', messagesArray, contatoNome, isMedia, mediaType);
-                            // }
-
-                            // let newMedia = new MessageMedia(mediaFile.mimetype, mediaFile.data);
-                            // messagesArray = newMedia;
-                            // let mediaHash = "./mediaCache/"+mediaFile.filename+".cache";
-
-                            // if(fs.existsSync(mediaHash)){
-                            //     let readFile = fs.readFileSync(mediaHash, "utf8");
-                            //     let parseJson = JSON.parse(readFile);
-                            //     let newMedia = new MessageMedia()
-                                
-                            // }
-
                         }else{
                             mediaType = false;
                             isMedia = false;
@@ -130,46 +120,48 @@ export async function initializeClient(id){
                     }
 
 
-                    break;
-                }
-            }
+                    // break;
+                // }
+            // }
         })
 
         socket.on("sendMessage", async function (msg, contadoSelecionado) {
 
             console.log("enviando mensagem")
 
-            let contatos = await client.getContacts();
+            // let contatos = await client.getContacts();
             let numberId = await client.getNumberId(contadoSelecionado);
 
-            if(contatos){
-                for (let index = 0; index < contatos.length; index++) {
-                    const contatosArray = contatos[index];
+            // if(contatos){
+            //     for (let index = 0; index < contatos.length; index++) {
+            //         const contatosArray = contatos[index];
     
-                    if(contatosArray.number == contadoSelecionado){
-                        let chat = await contatosArray.getChat();
-                        let chatId = chat.id;
+            //         if(contatosArray.number == contadoSelecionado){
+            //             let chat = await contatosArray.getChat();
+            //             let chatId = chat.id;
     
-                        await chat.sendStateTyping();
+            //             await chat.sendStateTyping();
     
-                        console.log("enviando mensagem")
-                        await client.sendMessage(chatId._serialized, msg);
+            //             console.log("enviando mensagem")
+            //             await client.sendMessage(chatId._serialized, msg);
     
-                        await chat.clearState();
-                    }
+            //             await chat.clearState();
+            //         }
                     
-                }
-            }else{
-                let numberId = await client.getNumberId(contadoSelecionado);
+            //     }
+            // }else{
+                // let numberId = await client.getNumberId(contadoSelecionado);
                 let numberFormatado = numberId._serialized;
 
+                let contato = await client.getContactById(numberFormatado);
+                let chat = await contato.getChat();
                 await chat.sendStateTyping();
     
                 console.log("enviando mensagem")
-                await client.sendMessage(chatId._serialized, msg);
+                await client.sendMessage(numberFormatado, msg);
 
                 await chat.clearState();
-            }
+            // }
 
         })
           
@@ -177,26 +169,4 @@ export async function initializeClient(id){
         console.log(error);
         return error;
     }
-}
-
-export async function getInitializedClient(id){
-
-    try {
-
-        let sessionId = String(id).replace(".","").replace(".","").replace(".","").replace(":","").replace(":","");
-
-        sessions[sessionId] = new Client({
-            authStrategy: new LocalAuth({
-                clientId:clientId,
-            }),
-        });
-
-        console.log('Buscando client');
-
-
-    } catch (error) {
-        console.log(error);
-        return error;
-    }
-
 }

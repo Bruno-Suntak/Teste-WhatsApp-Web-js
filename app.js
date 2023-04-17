@@ -95,6 +95,14 @@ io.on("connection", function (socket) {
         socket.broadcast.emit("searchMessage", chat, contatoNome, isMedia, mediaType);
     });
 
+    socket.on('sendQr', function(qr){
+        socket.broadcast.emit("resQr", qr);
+    });
+
+    socket.on('clientIniciado', function(){
+        socket.broadcast.emit("resClientIniciado");
+    });
+
     socket.on("disconnect", function(){
     	console.log("Disconnect");
         io.emit("update", sockets[socket.id] + " has left the server.");

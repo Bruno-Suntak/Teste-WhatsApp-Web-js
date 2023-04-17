@@ -11,21 +11,41 @@
     
     
 <body>
-        
-    {% include "./partials/navbar-vertical.html" %}
-    <div class="menu">
-        <div class="name" id="name">#</div>
+
+    <div id="divImgQrCode" class="container">
+        <div class="col-md-12">
+            <div id="cardQrCode" class="card text-white bg-dark border-dark mx-auto align-items-center">
+                <div class="card-header bg-transparent border-success"><h3 id="info-subtitle"><b>Leia o QR Code para iniciar uma sessão</b></h3></div>
+                <div class="card-body">
+                    <div id="loadingQrCode" class="spinner-border text-white" role="status">
+                        <span class="sr-only text-white">Carregando QR Code</span>
+                      </div>                      
+                    <img id="imgQrCode" src="" alt="">
+                </div>
+            </div> 
+        </div>
     </div>
     
-    <div id="chat">
+    <div id="geral" style="display: none;">
+
+        {% include "./partials/navbar-vertical.html" %}
+        <div class="menu">
+            <div class="name" id="name">#</div>
+        </div>
         
-        <ol class="chat">
+        <div id="chat">
             
-        </ol>
-        <input class="textarea" type="text" placeholder="Type here!" id="textarea" />
-        <div id='bottom'></div>
-        
+            <ol class="chat">
+                
+            </ol>
+            <input class="textarea" type="text" placeholder="Type here!" id="textarea" />
+            <div id='bottom'></div>
+            
+        </div>
+
+
     </div>
+
     <script src="../js/chat.js"></script>
 
 </body>

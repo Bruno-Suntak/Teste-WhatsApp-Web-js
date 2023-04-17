@@ -5,7 +5,7 @@ import qrcode from 'qrcode-terminal';
 import QRCode from 'qrcode'
 import puppeteer from 'puppeteer';
 import requestIp from 'request-ip';
-import { initializeClient, getInitializedClient } from '../controllers/chat-whatsapp.controller.js';
+import { initializeClient} from '../controllers/chat-whatsapp.controller.js';
 dotenv.config({
     allowEmptyValues: true
 });
@@ -44,11 +44,7 @@ router.post('/iniciarSessao', async(req, res) => {
 
         res.status(200).json({message:"Iniciando Client"});
         
-        if(globals.iniciado == true){
-            result = await getInitializedClient("2");
-        }else{
-            result = await initializeClient(ip);
-        }
+        result = await initializeClient(ip);
 
         
     } catch (error) {
